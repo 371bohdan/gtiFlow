@@ -1,0 +1,43 @@
+<nav class="navbar bg-primary" data-bs-theme="dark">
+    <a href="/logout" class="for_href">Exit from your account</a>
+</nav>
+
+<h1> Register </h1>
+
+
+{{#if errors}}
+  {{#each errors}}
+    <div class="alert alert-danger">{{this.msg}}</div>
+  {{/each}}
+{{/if}}
+
+{{#if errors}}
+<div class="alert alert-danger">
+    <ul>
+    {{#each errors}}
+    <li>{{this.msg}}</li>
+    {{/each}}
+    </ul>
+</div>
+{{/if}}
+<form action="/register" method="POST">
+    <div>
+        <label for="email"> E-mail: </label>
+        <input type="text" id="email" name="email" placeholder="Your email">
+    </div>
+    <div>
+        <label for="username"> Username: </label>
+        <input type="text" id="username" name="username" placeholder="Your username">
+    </div>
+    <div>
+        <label for="password"> Passowrd: </label>
+        <input type="password" id="password" name="password" placeholder="Your password">
+    </div>
+    <div>
+        <label for="password2"> Confirm password: </label>
+        <input type="password" id="password2" name="password2" placeholder="Confirm your password">
+    </div>
+    <div>
+        <button type="submit" class="for_button">Register</button>
+    </div>
+</form>

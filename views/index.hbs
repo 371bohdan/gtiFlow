@@ -1,0 +1,51 @@
+<nav class="navbar bg-primary" data-bs-theme="dark">
+    <a href="/logout" class="for_href">Exit from your account</a>
+    <a href="/water" class="for_href">Add new data</a>
+</nav>
+<div class="home">
+    <h1>
+        {{title}}
+    </h1>
+</div>
+<div>
+  <div class="users">
+    <h2>Users</h2>
+    <h1>Hello {{user.username}}, do you wish add or different your data?</h1>
+  </div>
+      <div class="container">
+  <div class="card">
+      <div class="card-header">
+          <div class="row">
+              <div class="col"> Your data </div>
+          </div>
+      </div>
+
+      <div class="card-body">
+          <div class="table-responsive">
+              <table class="table table-bordered">
+                  <tr>
+                      <th>name_place</th>
+                      <th>coordinateX</th>
+                      <th>coordinateY</th>
+                      <th>year</th>
+                      <th>season</th>
+                      <th>chemical_index</th>
+                      <th>result</th>
+                  </tr>
+                  {{#each water}}
+                      <tr>
+                          <td>{{ this.name_place }}</td>
+                          <td>{{ this.coordinateX }}</td>
+                          <td>{{ this.coordinateY }}</td>
+                          <td>{{ this.year }}</td>
+                          <td>{{ this.season }}</td>
+                          <td>{{ this.chemical_index }}</td>
+                          <td>{{ this.result }}</td>
+                      </tr>
+                  {{/each}}
+              </table>
+          </div>
+      </div>
+  </div>
+</div>
+</div>

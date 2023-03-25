@@ -1,0 +1,39 @@
+<nav class="navbar bg-primary" data-bs-theme="dark">
+    <a href="/logout" class="for_href">Exit from your account</a>
+</nav>
+
+{{#if errors}}
+<div class="alert alert-danger">
+    <ul>
+    {{#each errors}}
+    <li>{{this.msg}}</li>
+    {{/each}}
+    </ul>
+</div>
+{{/if}}
+
+<div class="water_data"> 
+    <h1>Add water data<h1>
+    <form action="/water" method="POST">
+        <span>Place get water</span>
+        <input type="text" name="name_place", placeholder="Place get water">
+        <span>Coordinate X</span>
+        <input type="text" name="coordinateX", placeholder="Coordinate X">
+        <span>Coordinate Y</span>
+        <input type="text" name="coordinateY", placeholder="Coordinate Y">
+        <span>Year</span>
+        <input type="text" name="year", placeholder="year">
+        <span>Season</span>
+        <select name="season" id="season">
+            <option value="winter"> Winter</option>
+            <option value="spring"> Spring </option>
+            <option value="summer"> Summer </option>
+            <option value="fall"> Fall </option>
+        </select>
+        <span>Chemical_index</span>
+        <input type="text" name="chemical_index", placeholder="Chemical index">
+        <span>Result</span>
+        <input type="text" name="result", placeholder="result">
+        <input type="submit" value="Add" />
+    </form>
+</div>

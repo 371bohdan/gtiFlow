@@ -1,0 +1,20 @@
+{{#if messages.error}}
+    <div class="error">{{error.flash}}</div>
+{{/if}}
+{{#if messages.success}}
+    <div class="success">{{success.flash}}</div>
+{{/if}}
+<form method="POST" action="/reset-password/{{token}}">
+    <div>
+        <h1>{{title}}</h1>
+        <span>Enter your new password </span>
+        <label for="password">New Password</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <div>
+        <span>Confirm your new password</span>
+        <label for="confirmPassword"> Confirm Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+    </div>
+    <button type="submit">Change Password</button>
+</form>
