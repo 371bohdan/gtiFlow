@@ -11,6 +11,8 @@ const app = express();
 const User = require('./models/user');
 const { allowInsecurePrototypeAccess } = require('@handlebars/allow-prototype-access');
 require('dotenv').config();
+const helpers = require('handlebars-helpers')();
+
 
 //Реалізація routes, щоб забезпечити місцеположення файлів js
 const indexRouter = require('./routes/start');
@@ -35,7 +37,14 @@ const PORT = process.env.PORT || 3000;
 
 
 //public = folder public with this directory who have name "__dirname"
-app.engine('hbs', expressHandlebars.engine({ extname: '.hbs', handlebars: allowInsecurePrototypeAccess(Handlebars)}))
+app.engine('hbs', expressHandlebars.engine({ extname: '.hbs', handlebars: allowInsecurePrototypeAccess(Handlebars), helpers: {
+    // Реєстрація хелпера ifCond
+    ifCond: helpers.ifCond,
+    ifEqual: function(arg1, arg2, options) {
+        return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
+      }
+  }}))
+
 
 app.set('view engine', 'hbs')
 app.set('views', 'views')
@@ -43,7 +52,7 @@ app.set('views', 'views')
 
 
 //Для Css файлів
-app.use(express.static(__dirname + '/views/public'));
+app.use(express.static('public'));
 
 app.use(session({
     secret:'verygoodsecret',

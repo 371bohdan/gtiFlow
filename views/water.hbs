@@ -1,5 +1,6 @@
 <nav class="navbar bg-primary" data-bs-theme="dark">
     <a href="/logout" class="for_href">Exit from your account</a>
+    <a href="/profile" class="for_href">Back</a>
 </nav>
 
 {{#if errors}}
@@ -16,13 +17,13 @@
     <h1>Add water data<h1>
     <form action="/water" method="POST">
         <span>Place get water</span>
-        <input type="text" name="name_place", placeholder="Place get water">
+        <input type="text" name="name_place" placeholder="Place get water">
         <span>Coordinate X</span>
-        <input type="text" name="coordinateX", placeholder="Coordinate X">
+        <input type="text" name="coordinateX" placeholder="Coordinate X">
         <span>Coordinate Y</span>
-        <input type="text" name="coordinateY", placeholder="Coordinate Y">
+        <input type="text" name="coordinateY" placeholder="Coordinate Y">
         <span>Year</span>
-        <input type="text" name="year", placeholder="year">
+        <input type="text" name="year" placeholder="year">
         <span>Season</span>
         <select name="season" id="season">
             <option value="winter"> Winter</option>
@@ -31,9 +32,11 @@
             <option value="fall"> Fall </option>
         </select>
         <span>Chemical_index</span>
-        <input type="text" name="chemical_index", placeholder="Chemical index">
+        <input type="text" name="chemical_index" placeholder="Chemical index">
         <span>Result</span>
-        <input type="text" name="result", placeholder="result">
+        <input type="text" name="result" placeholder="result">
+        <span>Comment</span>
+        <input type="text" name="comment" placeholder="comment">
         <input type="submit" value="Add" />
     </form>
 </div>

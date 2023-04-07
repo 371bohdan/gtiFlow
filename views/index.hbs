@@ -1,16 +1,33 @@
 <nav class="navbar bg-primary" data-bs-theme="dark">
     <a href="/logout" class="for_href">Exit from your account</a>
+    {{#ifEqual user.fname underfined}}
+        <a href="/add_data" class="for_href" title="Add your own data">Add data profile</a>
+        {{else}}
+        <p style="color:white; font: bold;">
+            <span>{{user.fname}}</span>
+            <span>{{user.lname}},</span>
+            <span>Gender: {{user.gender}},</span>
+            <span>Your age: {{user.age}}</span>
+            </p>
+    {{/ifEqual}}
+    <div>
+        <img class="avatarka" src="user.png" alt="{{user.username}}" style="postion:absolute; bottom:91%; left:89%;">
+        <ul class="hover-object">
+            <li><a href="/set_data" style="text-decoration: none;">Change data profile</a></li>
+        </ul>
+    </div>
+             
     <a href="/water" class="for_href">Add new data</a>
 </nav>
-<div class="home">
-    <h1>
-        {{title}}
-    </h1>
-</div>
+        {{#if flash.success}}
+            <div class="alert alert-success">{{flash.success}}</div>
+        {{/if}}
+        {{#if response.error}}
+            <div class="alert alert-danger">{{flash.error}}</div>
+        {{/if}}
 <div>
   <div class="users">
-    <h2>Users</h2>
-    <h1>Hello {{user.username}}, do you wish add or different your data?</h1>
+    <h1>Welcome back, {{user.username}}, do you wish add or different your data?</h1>
   </div>
       <div class="container">
   <div class="card">
@@ -31,6 +48,7 @@
                       <th>season</th>
                       <th>chemical_index</th>
                       <th>result</th>
+                      <th>comment</th>
                   </tr>
                   {{#each water}}
                       <tr>
@@ -41,7 +59,10 @@
                           <td>{{ this.season }}</td>
                           <td>{{ this.chemical_index }}</td>
                           <td>{{ this.result }}</td>
+                          <td>{{this.comment}}</td>
+                          <td><a class="for_href" href="/set_water/{{this._id}}" title="change your data">Change</a></td>
                       </tr>
+                      
                   {{/each}}
               </table>
           </div>
@@ -49,3 +70,23 @@
   </div>
 </div>
 </div>
+<script>
+    let avatarka = document.querySelector('.avatarka');
+    let list = document.querySelector('.hover-object');
+    avatarka.addEventListener('mouseenter', function() {
+        list.style.display = 'block';
+    });
+    list.addEventListener('mouseleave', function(event) {
+        if (!event.relatedTarget || !list.contains(event.relatedTarget)) {
+        list.style.display = 'none';
+        }
+    });
+
+    avatarka.addEventListener('mouseleave', function(event) {
+    if (!event.relatedTarget || !list.contains(event.relatedTarget)) {
+        list.style.display = 'none';
+    }
+});
+
+    
+</script>

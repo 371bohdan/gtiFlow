@@ -1,0 +1,40 @@
+<nav class="navbar bg-primary" data-bs-theme="dark">
+    <a href="/logout" class="for_href">Exit from your account</a>
+    <a href="/profile" class="for_href">Back</a>
+</nav>
+
+{{#if messages.error}}
+    <div class="error">{{error.flash}}</div>
+{{/if}}
+{{#if messages.success}}
+    <div class="success">{{success.flash}}</div>
+{{/if}}
+
+<div class="water_data"> 
+    <h1>Change water data<h1>
+    <form action="/set_water/{{water._id}}" method="POST">
+        <span>Place get water:</span>
+        <input type="text" name="name_place" value="{{water.name_place}}">
+        <span>Coordinate X:</span>
+        <input type="text" name="coordinateX" value="{{water.coordinateX}}">
+        <span>Coordinate Y:</span>
+        <input type="text" name="coordinateY" value="{{water.coordinateY}}">
+        <span>Year:</span>
+        <input type="text" name="year" value="{{water.year}}">
+        <span>Season:</span>
+        <select name="season" id="season">
+            <option value="{{water.season}}" disabled selected>{{water.season}}</option>
+            <option value="winter"> Winter</option>
+            <option value="spring"> Spring </option>
+            <option value="summer"> Summer </option>
+            <option value="fall"> Fall </option>
+        </select>
+        <span>Chemical index:</span>
+        <input type="text" name="chemical_index" value="{{water.chemical_index}}">
+        <span>Result:</span>
+        <input type="text" name="result" value="{{water.result}}">
+        <span>Comment:</span>
+        <input type="text" name="comment" value="{{water.comment}}">
+        <input type="submit" value="Change" />
+    </form>
+</div>

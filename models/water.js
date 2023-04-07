@@ -56,6 +56,9 @@ const analys_waterSchema = new mongoose.Schema({
             },
             message: props => `${props.value} is not a floating point number!`
         }
+    },
+    comment: {
+        type: String
     }
 })
 

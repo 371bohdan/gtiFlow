@@ -6,6 +6,7 @@ const passport = require('passport');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const { AnalysWater } = require('../models/water');
+const { get } = require('http');
 require('dotenv').config();
 
 
@@ -34,6 +35,7 @@ router.get('/profile', isLoggedIn, async (req, res) => {
         res.redirect('/login');
     }
 });
+
 
 
 // сторінка із авторизацією
@@ -148,12 +150,22 @@ router.get('/water', isLoggedIn, (req, res) => {
 });
 
 router.post('/water', async (req, res) => {
-    const {name_place, coordinateX, coordinateY, year, season, chemical_index, result} = req.body;
+    const {name_place, coordinateX, coordinateY, year, season, chemical_index, result, comment} = req.body;
     let errors = [];
     if (!name_place || !coordinateX || !coordinateY || !year || !season || !chemical_index|| !result){
         errors.push({
             msg: 'Please fill in all fields!'
         });
+    }
+    if(isNaN(parseFloat(coordinateX))){
+        errors.push({
+            msg: 'Incorrect enter coordinateX'
+        })
+    }
+    if(isNaN(parseFloat(coordinateY))){
+        errors.push({
+            msg: 'Incorrect enter coordinateY'
+        })
     }
     if(errors.length > 0){
         res.render('water', {
@@ -176,11 +188,12 @@ router.post('/water', async (req, res) => {
                 year: year,
                 season: season,
                 chemical_index: chemical_index,
-                result: result
+                result: result,
+                comment:comment
             });
             newAnalys.save();
             req.flash(
-                'Data loaded succesful',
+                'Data loaded successful',
             );
             res.redirect('/profile');
         } catch (error) {
@@ -201,6 +214,57 @@ router.post('/water', async (req, res) => {
         }
     }
 });
+
+//Коригування параметрів даних про воду
+
+router.get('/set_water/:_id', isLoggedIn, async (req, res) => {
+    try {
+        const user = await User.findById();
+        const water = await AnalysWater.findById(req.params._id);
+        res.render('set_water', {title: 'change data water', water, user});
+    }
+    catch(err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+})
+
+router.post('/set_water/:id', async (req, res) => {
+    const { name_place, coordinateX, coordinateY, year, season, chemical_index, result, comment } = req.body;
+    try {
+      if (isNaN(parseFloat(coordinateX))) {
+        req.flash('error', 'coordinateX must be a number with a period and not include characters other than numbers');
+        return res.redirect(`/set_water/${req.params.id}`);
+      }
+      if (isNaN(parseFloat(coordinateY))) {
+        req.flash('error', 'coordinateY must be a number with a period and not include characters other than numbers');
+        return res.redirect(`/set_water/${req.params.id}`);
+      }
+      await AnalysWater.updateOne(
+        { _id: req.params.id },
+        {
+          $set: {
+            name_place: name_place,
+            coordinateX: coordinateX,
+            coordinateY: coordinateY,
+            year: year,
+            season: season,
+            chemical_index: chemical_index,
+            result: result,
+            comment: comment,
+          },
+        }
+      );
+      req.flash('success', 'Data updated successfully');
+      res.redirect('/profile');
+    } catch (err) {
+      console.log(err);
+      req.flash('error', 'Error on server side');
+      await req.flash.save();
+      res.redirect(`/set_water/${req.params.id}`);
+    }
+  });
+
 
 
 //Функціонал скидання паролю
@@ -308,7 +372,6 @@ router.post('/forgot-password', async (req, res) => {
 // GET маршрут для відображення сторінки з формою зміни пароля
 router.get('/reset-password/:token', async (req, res) => {
     try {
-
         const user = await User.findOne({
             resetPasswordToken: req.params.token,
             resetPasswordExpires: { $gt: Date.now() }
@@ -361,4 +424,85 @@ router.post('/reset-password/:token', async (req, res) => {
 
 
 
+//Коригування параметрів особистих даних
+router.get('/add_data', isLoggedIn, async (req, res) => {
+    const user = await User.findById(req.user._id);
+    try{
+        res.render('add_data', { title: "Tell about you", user});
+    }
+    catch(err){
+        console.log(err);
+        res.redirect('/login');
+    }
+})
+
+router.post('/add_data', async (req,res) => {
+    const {fname, lname, gender, age} = req.body;
+    if(!fname || !lname || !gender || !age){
+        req.flash('error', 'Fill all fields!')
+    }
+    if(age > 120){
+        req.flash('error', `Very old age`);
+        return res.redirect('/profile');
+    }
+    if(age < 3){
+        req.flash('error', `Very young age`);
+        return res.redirect('/profile');
+    }
+    try{
+            await User.updateMany({}, {
+                $set: {
+                    fname: fname,
+                    lname: lname,
+                    gender: gender,
+                    age: age
+                }
+            });
+        req.flash('success',
+            'Data loaded successful',
+        );
+        res.redirect('/profile');
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'Something went wrong');
+        res.redirect('/profile');
+    }
+});
+
+router.get('/set_data', isLoggedIn, async (req, res) => {
+    const user = await User.findById(req.user._id);
+    try{
+        res.render('set_data', { title: "Change your data", user});
+    }
+    catch(err){
+        console.log(err);
+        res.redirect('/login');
+    }
+})
+
+router.post('/set_data', async (req,res) => {
+    const {fname, lname, gender, age} = req.body;
+    try{
+        await User.updateOne(
+            { _id: req.params._id }, // знайти запис за _id
+            { $set: { fname: fname, lname: lname, gender: gender, age: age } } // оновити значення
+        );
+        req.flash(
+            'success',
+            'Data updated successfully'
+        );
+        res.redirect('/profile');
+    } catch (error) {
+        console.error(error);
+        req.flash(
+            'error',
+            'Server Error'
+        );
+        res.redirect('/profile');
+    }
+  });
+
+
+
+  
 module.exports = router;
