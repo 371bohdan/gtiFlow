@@ -33,5 +33,4 @@ The route system is as follows:
 /register – registration of new users
 /forgot-password – if you forgot your password, you need to enter your registered e-mail, you will be sent a letter and you need to enter it using the specified url
 /reset-password/:token – url to reset your password.
-
-Update: remove other.hbs in directory: ./views/layouts/
+You can also add, change your data profile and change data about anlysis water
