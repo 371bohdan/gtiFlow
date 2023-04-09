@@ -35,5 +35,5 @@ The route system is as follows:
 /reset-password/:token – url to reset your password.
 You can also add, change your data profile and change data about anlysis water
 
-testing cod 0.2 version
+testing cod 0.3 version
 status: complete, error not found
